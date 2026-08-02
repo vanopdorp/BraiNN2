@@ -1,4 +1,3 @@
-# core/utils/Utils.py
 import torch
 from pathlib import Path
 from torch.utils.cpp_extension import load
@@ -20,6 +19,10 @@ ops = load(
 def clamp_update(dw, max_norm):
     dw = dw.to(torch.float16)
     max_norm = max_norm.to(torch.float16)
+
+    if max_norm.numel() == 1:
+        max_norm = max_norm.expand_as(dw)
+
     return ops.clamp_update_fp16(dw, max_norm)
 
 
