@@ -1,26 +1,17 @@
-import std.math
+import torch
+import modular
 
-def clamp_update(dw: List[Float16], max_norm: List[Float16]) -> List[Float16]:
-    var out: List[Float16] = List[Float16](length=len(dw), fill=0.0)
-    for i in range(len(dw)):
-        var d = dw[i]
-        var m = max_norm[i]
-        var a = std.math.abs(d)
-        out[i] = d * (m / (a + 1.0))
-    return out^
+fast_ops = modular.load("core/utils/fast_ops.mojo")
 
+def clamp_update(dw, max_norm):
+    out = fast_ops.clamp_update(
+        dw.to(torch.float16).cpu().tolist(),
+        max_norm.to(torch.float16).cpu().tolist()
+    )
+    return torch.tensor(out, dtype=torch.float16, device=dw.device)
 
-def soft_wta(x: List[Float16]) -> List[Float16]:
-    var relu: List[Float16] = List[Float16](length=len(x), fill=0.0)
-    var s: Float32 = 1.0
-
-    for i in range(len(x)):
-        var v = x[i]
-        var r = std.math.max(v, 0.0)
-        relu[i] = r
-        s += Float32(r)
-
-    var out: List[Float16] = List[Float16](length=len(x), fill=0.0)
-    for i in range(len(x)):
-        out[i] = relu[i] / Float16(s)
-    return out^
+def soft_wta(x):
+    out = fast_ops.soft_wta(
+        x.to(torch.float16).cpu().tolist()
+    )
+    return torch.tensor(out, dtype=torch.float16, device=x.device)
