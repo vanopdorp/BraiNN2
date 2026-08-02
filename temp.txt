@@ -1,0 +1,14 @@
+rate dit ben eerlijk maar consistent ben ook kritisch rate op engineeringsquality trainbaarheid en nog een paar andere ben ook kritisch ga geen onzin lullen geef use cases verbeteringen en wat er goed aan is eindig met een cijferoverzicht
+
+output met een tabel zoals dit
+Categorie	Score
+Engineeringkwaliteit	../10
+Trainbaarheid	4/10
+Use‑cases (research)	../10
+Use‑cases (praktisch)	../10
+Originaliteit	../10
+Stabiliteit	../10
+Documentatie / onderhoudbaarheid	../10
+
+Totaal (research‑prototype): ../10
+Totaal (Product): ../10
