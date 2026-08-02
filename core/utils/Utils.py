@@ -1,20 +1,4 @@
 import torch
-from pathlib import Path
-from torch.utils.cpp_extension import load
-
-root = Path(__file__).parent
-
-ops = load(
-    name="ops",
-    sources=[
-        root / "ops_extension.cpp",
-        root / "ops_extension.cu",
-        root / "clamp_update.cu",
-        root / "soft_wta.cu",
-    ],
-    verbose=True,
-)
-
 
 def clamp_update(dw, max_norm):
     dw = dw.to(torch.float16)
@@ -23,9 +7,13 @@ def clamp_update(dw, max_norm):
     if max_norm.numel() == 1:
         max_norm = max_norm.expand_as(dw)
 
-    return ops.clamp_update_fp16(dw, max_norm)
+    return dw * (max_norm / (torch.abs(dw) + 1.0))
 
 
 def soft_wta(x):
     x = x.to(torch.float16)
-    return ops.soft_wta_fp16(x)
+
+    relu = torch.relu(x)
+    s = relu.sum() + 1.0
+
+    return relu / s
