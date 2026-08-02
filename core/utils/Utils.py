@@ -16,7 +16,7 @@ ops = load(
 
 
 def clamp_update(dw, max_norm):
-    return ops.clamp_update_fp16(dw)
+    return ops.clamp_update_fp16(dw, max_norm)
 
 def soft_wta(x):
     return ops.soft_wta_fp16(x)
