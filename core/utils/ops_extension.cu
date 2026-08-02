@@ -65,7 +65,4 @@ torch::Tensor soft_wta_fp16(torch::Tensor x) {
     return out;
 }
 
-PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
-    m.def("clamp_update", &clamp_update_fp16, "Clamp update fp16 (CUDA)");
-    m.def("soft_wta", &soft_wta_fp16, "Soft WTA fp16 (CUDA)");
-}
+
