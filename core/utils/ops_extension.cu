@@ -6,7 +6,12 @@ extern "C" {
     __global__ void soft_wta_fp16_kernel(const __half*, __half*, float, int);
 }
 
-#include <torch/extension.h>
+#include <ATen/ATen.h>
+#include <torch/types.h>
+#include <torch/serialize.h>
+#include <torch/library.h>
+#include <cuda_fp16.h>
+
 
 void clamp_update_fp16_launcher(torch::Tensor dw,
                                 torch::Tensor max_norm,
