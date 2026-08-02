@@ -11,10 +11,9 @@ class TestFP16Benchmarks(unittest.TestCase):
         device = "cuda" if torch.cuda.is_available() else "cpu"
         print(f"\nBenchmark running on: {device}")
 
-        x = torch.randint(-128, 127, (4096,), dtype=torch.int8, device=device)
-        max_norm = torch.randint(1, 127, (1,), dtype=torch.int8, device=device)
+        x = torch.randn(4096, device=device, dtype=torch.float16)
+        max_norm = torch.ones(1, device=device, dtype=torch.float16) * 18
 
-        # Warm-up
         for _ in range(10):
             clamp_update(x, max_norm)
             soft_wta(x)
@@ -33,7 +32,6 @@ class TestFP16Benchmarks(unittest.TestCase):
             globals={"soft_wta": soft_wta, "x": x}
         )
 
-        # tijd per call in microseconden
         clamp_us = (t_clamp / runs) * 1e6
         wta_us = (t_wta / runs) * 1e6
 

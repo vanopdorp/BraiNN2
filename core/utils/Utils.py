@@ -1,3 +1,5 @@
+# core/utils/Utils.py
+import torch
 from pathlib import Path
 from torch.utils.cpp_extension import load
 
@@ -16,7 +18,11 @@ ops = load(
 
 
 def clamp_update(dw, max_norm):
+    dw = dw.to(torch.float16)
+    max_norm = max_norm.to(torch.float16)
     return ops.clamp_update_fp16(dw, max_norm)
 
+
 def soft_wta(x):
+    x = x.to(torch.float16)
     return ops.soft_wta_fp16(x)
