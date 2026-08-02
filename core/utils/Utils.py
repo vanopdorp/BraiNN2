@@ -7,6 +7,7 @@ ops = load(
     name="ops",
     sources=[
         root / "ops_extension.cpp",
+        root / "ops_extension.cu",
         root / "clamp_update.cu",
         root / "soft_wta.cu",
     ],
