@@ -1,17 +1,23 @@
+#include <ATen/ATen.h>
+#include <torch/types.h>
 #include <cuda_fp16.h>
 
 extern "C" {
-    __global__ void clamp_update_fp16_kernel(const __half*, const __half*, __half*, int);
-    __global__ void relu_and_sum_fp16_kernel(const __half*, __half*, float*, int);
-    __global__ void soft_wta_fp16_kernel(const __half*, __half*, float, int);
+    __global__ void clamp_update_fp16_kernel(const __half* dw,
+                                             const __half* max_norm,
+                                             __half* out,
+                                             int n);
+
+    __global__ void relu_and_sum_fp16_kernel(const __half* x,
+                                             __half* relu,
+                                             float* sum_buf,
+                                             int n);
+
+    __global__ void soft_wta_fp16_kernel(const __half* relu,
+                                         __half* out,
+                                         float sum,
+                                         int n);
 }
-
-#include <ATen/ATen.h>
-#include <torch/types.h>
-#include <torch/serialize.h>
-#include <torch/library.h>
-#include <cuda_fp16.h>
-
 
 void clamp_update_fp16_launcher(torch::Tensor dw,
                                 torch::Tensor max_norm,
@@ -64,5 +70,3 @@ torch::Tensor soft_wta_fp16(torch::Tensor x) {
 
     return out;
 }
-
-
