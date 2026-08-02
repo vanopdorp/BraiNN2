@@ -15,8 +15,8 @@ ops = load(
 )
 
 
-def clamp_update_cuda(dw, max_norm):
+def clamp_update(dw, max_norm):
     return ops.clamp_update_fp16(dw)
 
-def soft_wta_cuda(x):
+def soft_wta(x):
     return ops.soft_wta_fp16(x)
