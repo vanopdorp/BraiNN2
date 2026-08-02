@@ -1,4 +1,11 @@
-// fp16_ops_extension.cpp
+#include <cuda_fp16.h>
+
+extern "C" {
+    __global__ void clamp_update_fp16_kernel(const __half*, const __half*, __half*, int);
+    __global__ void relu_and_sum_fp16_kernel(const __half*, __half*, float*, int);
+    __global__ void soft_wta_fp16_kernel(const __half*, __half*, float, int);
+}
+
 #include <torch/extension.h>
 
 void clamp_update_fp16_launcher(torch::Tensor dw,
